@@ -1,52 +1,50 @@
-from datetime import date
+from models import Event
 
 
 def add_event(
-    events: list[dict],
+    events: list[Event],
     name: str,
-    event_date: date,
+    event_date: str,
     budget: float,
-) -> dict:
+) -> Event:
     """Добавить новое событие."""
     event_id = len(events) + 1
 
-    event = {
-        "id": event_id,
-        "name": name,
-        "date": event_date.isoformat(),
-        "budget": budget,
-    }
+    event = Event(
+        event_id=event_id,
+        name=name,
+        event_date=event_date,
+        budget=budget,
+    )
 
     events.append(event)
     return event
 
 
 def find_event(
-    events: list[dict],
+    events: list[Event],
     query: str,
-) -> list[dict]:
+) -> list[Event]:
     """Найти события по названию."""
     query = query.lower()
 
     return [
         event
         for event in events
-        if query in event["name"].lower()
+        if query in event.name.lower()
     ]
 
 
-def get_event_info(event: dict) -> str:
+def get_event_info(event: Event) -> str:
     """Получить информацию о событии."""
-    return (
-        f"Событие: {event['name']}, "
-        f"дата: {event['date']}, "
-        f"бюджет: {event['budget']} руб."
-    )
+    return str(event)
 
 
-def sort_events(events: list[dict]) -> list[dict]:
+def sort_events(
+    events: list[Event],
+) -> list[Event]:
     """Отсортировать события по дате."""
     return sorted(
         events,
-        key=lambda event: event["date"],
+        key=lambda event: event.date,
     )

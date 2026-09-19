@@ -1,54 +1,57 @@
+from models import Event, Expense
+
+
 def add_expense(
-    expenses: list[dict],
-    event_id: int,
+    expenses: list[Expense],
+    event: Event,
     title: str,
     amount: float,
-) -> dict:
+) -> Expense:
     """Добавить расход."""
     expense_id = len(expenses) + 1
 
-    expense = {
-        "id": expense_id,
-        "event_id": event_id,
-        "title": title,
-        "amount": amount,
-    }
+    expense = Expense(
+        expense_id=expense_id,
+        event=event,
+        title=title,
+        amount=amount,
+    )
 
     expenses.append(expense)
     return expense
 
 
 def get_total_expenses(
-    expenses: list[dict],
-    event_id: int,
+    expenses: list[Expense],
+    event: Event,
 ) -> float:
     """Посчитать сумму расходов события."""
     total = 0.0
 
     for expense in expenses:
-        if expense["event_id"] == event_id:
-            total += expense["amount"]
+        if expense.event.id == event.id:
+            total += expense.amount
 
     return total
 
 
 def check_budget(
-    budget: float,
-    expenses: float,
+    event: Event,
+    total_expenses: float,
 ) -> str:
     """Проверить, хватает ли бюджета."""
-    if expenses <= budget:
+    if event.is_budget_enough(total_expenses):
         return "Бюджета достаточно"
 
     return "Расходы превышают бюджет"
 
 
 def sort_expenses(
-    expenses: list[dict],
-) -> list[dict]:
+    expenses: list[Expense],
+) -> list[Expense]:
     """Отсортировать расходы по сумме."""
     return sorted(
         expenses,
-        key=lambda expense: expense["amount"],
+        key=lambda expense: expense.amount,
         reverse=True,
     )

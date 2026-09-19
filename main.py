@@ -2,8 +2,19 @@ from datetime import date
 
 from events import add_event, find_event, get_event_info, sort_events
 from expenses import add_expense, check_budget, get_total_expenses
+from models import Event
 from participants import add_participant, count_participants
-from storage import load_json, save_json
+from storage import (
+    find_event_by_id,
+    load_events,
+    load_expenses,
+    load_participants,
+    load_tasks,
+    save_events,
+    save_expenses,
+    save_participants,
+    save_tasks,
+)
 from tasks import add_task, complete_task, get_pending_tasks
 
 
@@ -47,18 +58,22 @@ def input_float(prompt: str) -> float:
             print("Ошибка: введите число.")
 
 
-def input_date(prompt: str) -> date:
+def input_date(prompt: str) -> str:
     """Запросить дату в формате ГГГГ-ММ-ДД."""
     while True:
         value = input(prompt)
 
         try:
-            return date.fromisoformat(value)
+            date.fromisoformat(value)
+            return value
         except ValueError:
-            print("Ошибка: используйте формат ГГГГ-ММ-ДД.")
+            print(
+                "Ошибка: используйте формат "
+                "ГГГГ-ММ-ДД."
+            )
 
 
-def show_events(events: list[dict]) -> None:
+def show_events(events: list[Event]) -> None:
     """Вывести список событий."""
     if not events:
         print("Событий пока нет.")
@@ -66,33 +81,69 @@ def show_events(events: list[dict]) -> None:
 
     for event in sort_events(events):
         print(
-            f"{event['id']}. "
-            f"{event['name']} | "
-            f"{event['date']} | "
-            f"бюджет: {event['budget']} руб."
+            f"{event.id}. {event}"
         )
+
+
+def get_event_from_user(
+    events: list[Event],
+) -> Event | None:
+    """Получить событие по введённому ID."""
+    event_id = input_int("ID события: ")
+
+    event = find_event_by_id(
+        events,
+        event_id,
+    )
+
+    if event is None:
+        print("Событие не найдено.")
+
+    return event
 
 
 def main() -> None:
     """Точка запуска приложения HomeParty."""
-    events = load_json(EVENTS_FILE)
-    participants = load_json(PARTICIPANTS_FILE)
-    tasks = load_json(TASKS_FILE)
-    expenses = load_json(EXPENSES_FILE)
+    events = load_events(EVENTS_FILE)
+
+    participants = load_participants(
+        PARTICIPANTS_FILE,
+        events,
+    )
+
+    tasks = load_tasks(
+        TASKS_FILE,
+        events,
+    )
+
+    expenses = load_expenses(
+        EXPENSES_FILE,
+        events,
+    )
 
     while True:
         show_menu()
-        choice = input("Выберите действие: ")
+
+        choice = input(
+            "Выберите действие: "
+        )
 
         if choice == "1":
             show_events(events)
 
         elif choice == "2":
-            name = input("Название события: ")
-            event_date = input_date(
-                "Дата события в формате ГГГГ-ММ-ДД: "
+            name = input(
+                "Название события: "
             )
-            budget = input_float("Бюджет: ")
+
+            event_date = input_date(
+                "Дата события "
+                "в формате ГГГГ-ММ-ДД: "
+            )
+
+            budget = input_float(
+                "Бюджет: "
+            )
 
             event = add_event(
                 events,
@@ -101,13 +152,18 @@ def main() -> None:
                 budget,
             )
 
-            save_json(EVENTS_FILE, events)
+            save_events(
+                EVENTS_FILE,
+                events,
+            )
 
             print("Событие добавлено:")
             print(get_event_info(event))
 
         elif choice == "3":
-            query = input("Введите название события: ")
+            query = input(
+                "Введите название события: "
+            )
 
             found_events = find_event(
                 events,
@@ -118,139 +174,227 @@ def main() -> None:
                 print("События не найдены.")
             else:
                 for event in found_events:
-                    print(get_event_info(event))
+                    print(
+                        f"{event.id}. "
+                        f"{get_event_info(event)}"
+                    )
 
         elif choice == "4":
-            event_id = input_int("ID события: ")
-            name = input("Имя участника: ")
+            event = get_event_from_user(
+                events
+            )
+
+            if event is None:
+                continue
+
+            name = input(
+                "Имя участника: "
+            )
 
             participant = add_participant(
                 participants,
-                event_id,
+                event,
                 name,
             )
 
-            save_json(
+            save_participants(
                 PARTICIPANTS_FILE,
                 participants,
             )
 
             print(
-                f"Участник {participant['name']} добавлен."
+                f"Участник "
+                f"{participant.name} "
+                f"добавлен."
             )
 
         elif choice == "5":
-            event_id = input_int("ID события: ")
+            event = get_event_from_user(
+                events
+            )
+
+            if event is None:
+                continue
 
             count = count_participants(
                 participants,
-                event_id,
+                event,
             )
 
             print(
-                f"Количество участников: {count}"
+                f"Количество участников: "
+                f"{count}"
             )
 
         elif choice == "6":
-            event_id = input_int("ID события: ")
-            title = input("Название задачи: ")
+            event = get_event_from_user(
+                events
+            )
+
+            if event is None:
+                continue
+
+            title = input(
+                "Название задачи: "
+            )
 
             task = add_task(
                 tasks,
-                event_id,
+                event,
                 title,
             )
 
-            save_json(TASKS_FILE, tasks)
+            save_tasks(
+                TASKS_FILE,
+                tasks,
+            )
 
             print(
-                f"Задача «{task['title']}» добавлена."
+                f"Задача "
+                f"«{task.title}» "
+                f"добавлена."
             )
 
         elif choice == "7":
-            task_id = input_int("ID задачи: ")
+            task_id = input_int(
+                "ID задачи: "
+            )
 
-            if complete_task(tasks, task_id):
-                save_json(TASKS_FILE, tasks)
-                print("Задача выполнена.")
+            if complete_task(
+                tasks,
+                task_id,
+            ):
+                save_tasks(
+                    TASKS_FILE,
+                    tasks,
+                )
+
+                print(
+                    "Задача выполнена."
+                )
             else:
-                print("Задача не найдена.")
+                print(
+                    "Задача не найдена."
+                )
 
         elif choice == "8":
-            event_id = input_int("ID события: ")
+            event = get_event_from_user(
+                events
+            )
+
+            if event is None:
+                continue
 
             pending_tasks = get_pending_tasks(
                 tasks,
-                event_id,
+                event,
             )
 
             if not pending_tasks:
-                print("Невыполненных задач нет.")
+                print(
+                    "Невыполненных задач нет."
+                )
             else:
                 for task in pending_tasks:
                     print(
-                        f"{task['id']}. {task['title']}"
+                        f"{task.id}. "
+                        f"{task}"
                     )
 
         elif choice == "9":
-            event_id = input_int("ID события: ")
-            title = input("Название расхода: ")
-            amount = input_float("Сумма расхода: ")
+            event = get_event_from_user(
+                events
+            )
+
+            if event is None:
+                continue
+
+            title = input(
+                "Название расхода: "
+            )
+
+            amount = input_float(
+                "Сумма расхода: "
+            )
 
             expense = add_expense(
                 expenses,
-                event_id,
+                event,
                 title,
                 amount,
             )
 
-            save_json(
+            save_expenses(
                 EXPENSES_FILE,
                 expenses,
             )
 
             print(
-                f"Расход «{expense['title']}» добавлен."
+                f"Расход "
+                f"«{expense.title}» "
+                f"добавлен."
             )
 
         elif choice == "10":
-            event_id = input_int("ID события: ")
-
-            event = None
-
-            for current_event in events:
-                if current_event["id"] == event_id:
-                    event = current_event
-                    break
+            event = get_event_from_user(
+                events
+            )
 
             if event is None:
-                print("Событие не найдено.")
                 continue
 
             total = get_total_expenses(
                 expenses,
-                event_id,
+                event,
             )
 
             print(
-                f"Бюджет: {event['budget']} руб."
+                f"Бюджет: "
+                f"{event.budget} руб."
             )
+
             print(
-                f"Расходы: {total} руб."
+                f"Расходы: "
+                f"{total} руб."
             )
+
             print(
                 check_budget(
-                    event["budget"],
+                    event,
                     total,
                 )
             )
 
         elif choice == "0":
-            print("Работа программы завершена.")
+            save_events(
+                EVENTS_FILE,
+                events,
+            )
+
+            save_participants(
+                PARTICIPANTS_FILE,
+                participants,
+            )
+
+            save_tasks(
+                TASKS_FILE,
+                tasks,
+            )
+
+            save_expenses(
+                EXPENSES_FILE,
+                expenses,
+            )
+
+            print(
+                "Работа программы завершена."
+            )
             break
 
         else:
-            print("Неизвестная команда.")
+            print(
+                "Неизвестная команда."
+            )
 
 
 if __name__ == "__main__":

@@ -1,43 +1,45 @@
+from models import Event, Task
+
+
 def add_task(
-    tasks: list[dict],
-    event_id: int,
+    tasks: list[Task],
+    event: Event,
     title: str,
-) -> dict:
+) -> Task:
     """Добавить задачу подготовки."""
     task_id = len(tasks) + 1
 
-    task = {
-        "id": task_id,
-        "event_id": event_id,
-        "title": title,
-        "completed": False,
-    }
+    task = Task(
+        task_id=task_id,
+        event=event,
+        title=title,
+    )
 
     tasks.append(task)
     return task
 
 
 def complete_task(
-    tasks: list[dict],
+    tasks: list[Task],
     task_id: int,
 ) -> bool:
     """Отметить задачу как выполненную."""
     for task in tasks:
-        if task["id"] == task_id:
-            task["completed"] = True
+        if task.id == task_id:
+            task.complete()
             return True
 
     return False
 
 
 def get_pending_tasks(
-    tasks: list[dict],
-    event_id: int,
-) -> list[dict]:
+    tasks: list[Task],
+    event: Event,
+) -> list[Task]:
     """Получить невыполненные задачи события."""
     return [
         task
         for task in tasks
-        if task["event_id"] == event_id
-        and not task["completed"]
+        if task.event.id == event.id
+        and not task.completed
     ]
