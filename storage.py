@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from models import Event, Expense, Participant, Task
+from models import Event, Expense, Participant, Task, User
 
 
 def read_json(filename: str) -> list[dict[str, Any]]:
@@ -223,6 +223,43 @@ def save_expenses(
                 "event_id": expense.event.id,
                 "title": expense.title,
                 "amount": expense.amount,
+            }
+        )
+
+    write_json(filename, data)
+
+
+def load_users(
+    filename: str,
+) -> list[User]:
+    """Загрузить пользователей из JSON."""
+    data = read_json(filename)
+    users = []
+
+    for item in data:
+        user = User(
+            user_id=item["id"],
+            name=item["name"],
+            email=item["email"],
+        )
+        users.append(user)
+
+    return users
+
+
+def save_users(
+    filename: str,
+    users: list[User],
+) -> None:
+    """Сохранить пользователей в JSON."""
+    data = []
+
+    for user in users:
+        data.append(
+            {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
             }
         )
 

@@ -10,18 +10,22 @@ from storage import (
     load_expenses,
     load_participants,
     load_tasks,
+    load_users,
     save_events,
     save_expenses,
     save_participants,
     save_tasks,
+    save_users,
 )
 from tasks import add_task, complete_task, get_pending_tasks
+from users import add_user, find_user
 
 
 EVENTS_FILE = "data/events.json"
 PARTICIPANTS_FILE = "data/participants.json"
 TASKS_FILE = "data/tasks.json"
 EXPENSES_FILE = "data/expenses.json"
+USERS_FILE = "data/users.json"
 
 
 def show_menu() -> None:
@@ -37,6 +41,8 @@ def show_menu() -> None:
     print("8. Показать невыполненные задачи")
     print("9. Добавить расход")
     print("10. Проверить бюджет")
+    print("11. Добавить пользователя")
+    print("12. Найти пользователя")
     print("0. Выход")
 
 
@@ -120,6 +126,8 @@ def main() -> None:
         EXPENSES_FILE,
         events,
     )
+
+    users = load_users(USERS_FILE)
 
     while True:
         show_menu()
@@ -365,6 +373,50 @@ def main() -> None:
                 )
             )
 
+        elif choice == "11":
+            name = input(
+                "Имя пользователя: "
+            )
+
+            email = input(
+                "Электронная почта: "
+            )
+
+            user = add_user(
+                users,
+                name,
+                email,
+            )
+
+            save_users(
+                USERS_FILE,
+                users,
+            )
+
+            print(
+                f"Пользователь "
+                f"{user.name} "
+                f"добавлен."
+            )
+
+        elif choice == "12":
+            query = input(
+                "Введите имя или почту: "
+            )
+
+            found_users = find_user(
+                users,
+                query,
+            )
+
+            if not found_users:
+                print("Пользователи не найдены.")
+            else:
+                for user in found_users:
+                    print(
+                        f"{user.id}. {user}"
+                    )
+
         elif choice == "0":
             save_events(
                 EVENTS_FILE,
@@ -384,6 +436,11 @@ def main() -> None:
             save_expenses(
                 EXPENSES_FILE,
                 expenses,
+            )
+
+            save_users(
+                USERS_FILE,
+                users,
             )
 
             print(
