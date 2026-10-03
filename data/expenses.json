@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": 1,
+        "event_id": 1,
+        "title": "Торт",
+        "amount": 3500
+    },
+    {
+        "id": 2,
+        "event_id": 1,
+        "title": "Украшения",
+        "amount": 2200
+    },
+    {
+        "id": 3,
+        "event_id": 2,
+        "title": "Посуда",
+        "amount": 4800
+    }
+]

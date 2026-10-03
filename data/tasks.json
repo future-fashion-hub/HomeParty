@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": 1,
+        "event_id": 1,
+        "title": "Заказать торт",
+        "completed": true
+    },
+    {
+        "id": 2,
+        "event_id": 1,
+        "title": "Украсить комнату",
+        "completed": false
+    },
+    {
+        "id": 3,
+        "event_id": 2,
+        "title": "Подготовить список гостей",
+        "completed": false
+    }
+]
