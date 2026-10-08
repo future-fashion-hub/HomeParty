@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Главная — HomeParty{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Всё для вашего праздника</p>
+    <h1>HomeParty</h1>
+    <p class="lead">Веб-интерфейс сервиса организации домашних праздников.</p>
+    <p>Планируйте события, приглашайте участников, проверяйте задачи подготовки и контролируйте расходы.</p>
+  </section>
+  <section class="summary-grid" aria-label="Основные разделы">
+    <a class="summary-card" href="{% url 'events_app:event_list' %}">
+      <h2>События</h2><p class="summary-count">{{ events|length }}</p>
+    </a>
+    <a class="summary-card" href="{% url 'participants_app:participant_list' %}">
+      <h2>Участники</h2><p class="summary-count">{{ participants|length }}</p>
+    </a>
+    <a class="summary-card" href="{% url 'tasks_app:task_list' %}">
+      <h2>Задачи</h2><p class="summary-count">{{ tasks|length }}</p>
+    </a>
+    <a class="summary-card" href="{% url 'expenses_app:expense_list' %}">
+      <h2>Расходы</h2><p class="summary-count">{{ expenses|length }}</p>
+    </a>
+  </section>
+{% endblock %}

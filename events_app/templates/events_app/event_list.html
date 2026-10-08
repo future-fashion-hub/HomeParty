@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}События — HomeParty{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <h1>События</h1>
+    <p>Всего событий: {{ events|length }}</p>
+  </section>
+  <div class="event-grid">
+    {% for event in events %}
+      {% include "events_app/includes/event_card.html" %}
+    {% empty %}
+      <p class="empty-state">События пока не добавлены.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

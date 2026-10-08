@@ -1,0 +1,76 @@
+:root {
+  --party-blue: #2459ae;
+  --party-surface: #ffffff;
+  --party-border: #dce3ed;
+  --party-text: #25334a;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+  color: var(--party-text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--party-blue); }
+a:focus-visible { outline: 3px solid #e8ad45; outline-offset: 4px; }
+.container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+.site-header { background: white; border-bottom: 1px solid var(--party-border); }
+.site-navigation { display: flex; align-items: center; gap: 24px; padding: 18px 0; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 22px; font-weight: 700; white-space: nowrap; }
+.navigation-links { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.navigation-links a { padding: 6px 12px; text-decoration: none; border-radius: 7px; color: #566279; }
+.navigation-links a:hover, .navigation-links a[aria-current="page"] { color: var(--party-blue); background: #eaf0fa; }
+.page-content { flex: 1; padding: 48px 0; }
+.page-heading { margin-bottom: 28px; }
+h1 { margin: 0 0 16px; font-size: clamp(30px, 4vw, 42px); font-weight: 700; line-height: 1.25; }
+h2 { font-size: 22px; font-weight: 600; }
+p { margin: 0 0 16px; }
+.lead { font-size: 20px; }
+.eyebrow { color: #60738e; font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+.summary-grid, .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.summary-card { padding: 24px; background: var(--party-surface); border: 1px solid var(--party-border); border-top: 4px solid var(--party-blue); border-radius: 10px; text-decoration: none; color: var(--party-text); }
+.summary-card:hover { box-shadow: 0 5px 20px #2459ae15; }
+.summary-count { font-size: 38px; font-weight: 700; margin: 12px 0 0; }
+.event-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.card { background: white; border: 1px solid var(--party-border); border-radius: 10px; }
+.event-card { box-shadow: 0 3px 12px #25334a08; }
+.event-card .card-body { padding: 28px; }
+.btn { display: inline-block; padding: 9px 16px; border: 1px solid var(--party-blue); border-radius: 7px; text-decoration: none; }
+.btn-primary { background: var(--party-blue); color: white; }
+.btn-outline-secondary { color: #566279; border-color: #8793a5; background: white; }
+.back-link { margin-top: 24px; }
+.metrics-grid { margin: 24px 0; }
+.metrics-grid > div { padding: 16px; background: #f5f7fb; border-radius: 8px; }
+.metrics-grid dt { font-weight: 600; }
+.metrics-grid dd { margin: 8px 0 0; }
+.status, .task-status { display: inline-block; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 14px; }
+.status-success { color: #176343; background: #e1f3e9; }
+.status-warning { color: #805816; background: #fff1d4; }
+.table-responsive { overflow-x: auto; background: white; border: 1px solid var(--party-border); border-radius: 10px; }
+.domain-table { width: 100%; border-collapse: collapse; margin: 0; }
+.domain-table th, .domain-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--party-border); vertical-align: middle; }
+.domain-table th { background: #eaf0fa; font-size: 14px; }
+.domain-table tr:last-child td { border-bottom: 0; }
+.amount { white-space: nowrap; }
+.empty-state { padding: 24px; color: #60738e; }
+.task-links { padding-left: 20px; }
+.site-footer { padding: 24px 0; border-top: 1px solid var(--party-border); color: #65738a; font-size: 14px; }
+.site-footer p { margin: 0; }
+
+@media (max-width: 800px) {
+  .site-navigation { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .navigation-links { margin-left: 0; }
+  .summary-grid, .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .container { width: calc(100% - 28px); }
+  .page-content { padding: 28px 0; }
+  .event-grid, .summary-grid, .metrics-grid { grid-template-columns: 1fr; }
+  .navigation-links a { padding: 6px 8px; }
+  .event-card .card-body { padding: 20px; }
+}

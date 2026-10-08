@@ -1,0 +1,9 @@
+<article class="card event-card">
+  <div class="card-body">
+    <p class="eyebrow">Событие № {{ event.id }}</p>
+    <h2>{{ event.name|default:"Без названия" }}</h2>
+    <p>Дата: {{ event.date|default:"Не указана" }}</p>
+    <p>Бюджет: {{ event.budget|floatformat:2 }} руб.</p>
+    <a class="btn btn-primary" href="{% url 'events_app:event_detail' event.id %}">Подробнее</a>
+  </div>
+</article>

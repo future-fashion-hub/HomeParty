@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{% if task %}{{ task.title|default:"Без названия" }}{% else %}Задача не найдена{% endif %} — HomeParty{% endblock %}
+{% block content %}
+  {% if task %}
+    <article class="card event-card">
+      <div class="card-body">
+        <p class="eyebrow">Задача № {{ task.id }}</p>
+        <h1>{{ task.title|default:"Без названия" }}</h1>
+        <p>Событие: <a href="{% url 'events_app:event_detail' task.event.id %}">{{ task.event.name|default:"Без названия" }}</a></p>
+        <p>Дата события: {{ task.event.date|default:"Не указана" }}</p>
+        <p>Статус: {% include "tasks_app/includes/task_status.html" %}</p>
+      </div>
+    </article>
+  {% else %}
+    <h1>Задача не найдена</h1>
+    <p>Задачи с таким идентификатором нет.</p>
+  {% endif %}
+  <a class="btn btn-outline-secondary back-link" href="{% url 'tasks_app:task_list' %}">К списку задач</a>
+{% endblock %}

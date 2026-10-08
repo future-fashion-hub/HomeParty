@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Расходы — HomeParty{% endblock %}
+{% block content %}
+  <section class="page-heading"><h1>Расходы</h1><p>Всего расходов: {{ expenses|length }}</p></section>
+  <div class="table-responsive">
+    <table class="table domain-table">
+      <thead><tr><th scope="col">ID</th><th scope="col">Расход</th><th scope="col">Событие</th><th scope="col">Сумма</th></tr></thead>
+      <tbody>
+        {% for expense in expenses %}
+          <tr>
+            <td>{{ expense.id }}</td>
+            <td>{{ expense.title|default:"Без названия" }}</td>
+            <td><a href="{% url 'events_app:event_detail' expense.event.id %}">{{ expense.event.name|default:"Без названия" }}</a></td>
+            <td class="amount">{{ expense.amount|floatformat:2 }} руб.</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="empty-state">Расходов пока нет.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

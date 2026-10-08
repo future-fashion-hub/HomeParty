@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Задачи — HomeParty{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <h1>Задачи подготовки</h1>
+    <p>Всего задач: {{ tasks|length }}</p>
+  </section>
+  <div class="table-responsive">
+    <table class="table domain-table">
+      <thead><tr><th scope="col">ID</th><th scope="col">Задача</th><th scope="col">Событие</th><th scope="col">Статус</th></tr></thead>
+      <tbody>
+        {% for task in tasks %}
+          <tr>
+            <td>{{ task.id }}</td>
+            <td><a href="{% url 'tasks_app:task_detail' task.id %}">{{ task.title|default:"Без названия" }}</a></td>
+            <td><a href="{% url 'events_app:event_detail' task.event.id %}">{{ task.event.name|default:"Без названия" }}</a></td>
+            <td>{% include "tasks_app/includes/task_status.html" %}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="empty-state">Задач пока нет.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{% if event %}{{ event.name|default:"Без названия" }}{% else %}Событие не найдено{% endif %} — HomeParty{% endblock %}
+{% block content %}
+  {% if event %}
+    <article class="card event-card">
+      <div class="card-body">
+        <p class="eyebrow">Событие № {{ event.id }}</p>
+        <h1>{{ event.name|default:"Без названия" }}</h1>
+        <p>Дата: {{ event.date|default:"Не указана" }}</p>
+        <dl class="metrics-grid">
+          <div><dt>Бюджет</dt><dd>{{ event.budget|floatformat:2 }} руб.</dd></div>
+          <div><dt>Расходы</dt><dd>{{ total_expenses|floatformat:2 }} руб.</dd></div>
+          <div><dt>Участники</dt><dd>{{ participant_total }}</dd></div>
+          <div><dt>Открытые задачи</dt><dd>{{ pending_tasks|length }}</dd></div>
+        </dl>
+        <p class="status {% if budget_enough %}status-success{% else %}status-warning{% endif %}">{{ budget_status }}</p>
+        <h2>Задачи в работе</h2>
+        <ul class="task-links">
+          {% for task in pending_tasks %}
+            <li><a href="{% url 'tasks_app:task_detail' task.id %}">{{ task.title|default:"Без названия" }}</a></li>
+          {% empty %}
+            <li>Все задачи выполнены или ещё не добавлены.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </article>
+  {% else %}
+    <h1>Событие не найдено</h1>
+    <p>События с таким идентификатором нет.</p>
+  {% endif %}
+  <a class="btn btn-outline-secondary back-link" href="{% url 'events_app:event_list' %}">К списку событий</a>
+{% endblock %}

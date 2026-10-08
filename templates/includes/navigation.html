@@ -1,0 +1,16 @@
+{% load static %}
+<header class="site-header">
+  <nav class="container site-navigation" aria-label="Основная навигация">
+    <a class="brand" href="{% url 'homepage:index' %}">
+      <img src="{% static 'homepage/img/logo.svg' %}" alt="" width="40" height="40">
+      <span>HomeParty</span>
+    </a>
+    <div class="navigation-links">
+      <a href="{% url 'homepage:index' %}"{% if request.resolver_match.app_name == 'homepage' %} aria-current="page"{% endif %}>Главная</a>
+      <a href="{% url 'events_app:event_list' %}"{% if request.resolver_match.app_name == 'events_app' %} aria-current="page"{% endif %}>События</a>
+      <a href="{% url 'participants_app:participant_list' %}"{% if request.resolver_match.app_name == 'participants_app' %} aria-current="page"{% endif %}>Участники</a>
+      <a href="{% url 'tasks_app:task_list' %}"{% if request.resolver_match.app_name == 'tasks_app' %} aria-current="page"{% endif %}>Задачи</a>
+      <a href="{% url 'expenses_app:expense_list' %}"{% if request.resolver_match.app_name == 'expenses_app' %} aria-current="page"{% endif %}>Расходы</a>
+    </div>
+  </nav>
+</header>
