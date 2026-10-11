@@ -18,3 +18,8 @@ def index(request) -> HttpResponse:
         "expenses": load_expenses(data_dir / "expenses.json", events),
     }
     return render(request, "homepage/index.html", context)
+
+
+def page_not_found(request, exception) -> HttpResponse:
+    """Общий обработчик неизвестных URL и исключений Http404."""
+    return render(request, "404.html", status=404)
