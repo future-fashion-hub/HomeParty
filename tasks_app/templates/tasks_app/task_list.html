@@ -4,6 +4,7 @@
   <section class="page-heading">
     <h1>Задачи подготовки</h1>
     <p>Всего задач: {{ tasks|length }}</p>
+    <a href="{% url 'tasks_app:pending' %}">Только задачи в работе</a>
   </section>
   <div class="table-responsive">
     <table class="table domain-table">

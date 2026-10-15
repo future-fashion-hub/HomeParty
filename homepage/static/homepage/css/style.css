@@ -61,6 +61,8 @@ p { margin: 0 0 16px; }
 .task-links { padding-left: 20px; }
 .site-footer { padding: 24px 0; border-top: 1px solid var(--party-border); color: #65738a; font-size: 14px; }
 .site-footer p { margin: 0; }
+.search-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0 28px; }
+.search-form input { padding: 8px; border: 1px solid var(--party-border); border-radius: 6px; max-width: 100%; }
 
 @media (max-width: 800px) {
   .site-navigation { align-items: flex-start; flex-direction: column; gap: 12px; }

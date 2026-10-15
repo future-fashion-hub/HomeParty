@@ -1,15 +1,13 @@
-from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from storage import load_events, load_expenses
+from db.database import fetch_all
+from db.presentation import with_event
 
 
 def expense_list(request) -> HttpResponse:
     """Передать расходы и связанные события в шаблон."""
-    data_dir = settings.BASE_DIR / "data"
-    events = load_events(data_dir / "events.json")
-    expenses = load_expenses(data_dir / "expenses.json", events)
+    expenses = [with_event(row) for row in fetch_all("expenses_with_events")]
     return render(
         request, "expenses_app/expense_list.html", {"expenses": expenses},
     )

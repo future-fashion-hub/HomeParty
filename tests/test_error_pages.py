@@ -39,7 +39,7 @@ def test_http404_from_view_uses_global_handler(monkeypatch) -> None:
     def missing_data(*args, **kwargs):
         raise Http404("Internal exception details must not be displayed")
 
-    monkeypatch.setattr("events_app.views.load_events", missing_data)
+    monkeypatch.setattr("events_app.views.fetch_all", missing_data)
     response = Client().get("/events/")
     html = response.content.decode()
     assert response.status_code == 404

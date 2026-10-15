@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Готовность праздников — HomeParty{% endblock %}
+{% block content %}
+  <h1>Готовность праздников по дате</h1>
+  <p>Находим события на выбранную дату, у которых нет незавершённых задач подготовки. Это не проверка наличия свободного помещения.</p>
+  <form method="get" action="{% url 'events_app:ready' %}" class="search-form">
+    <label for="date">Дата праздника</label>
+    <input type="date" id="date" name="date" value="{{ selected_date }}" required>
+    <button type="submit" class="btn btn-primary">Найти</button>
+  </form>
+  {% if error %}<p role="alert">{{ error }}</p>
+  {% elif selected_date %}
+    <h2>Готовые события на {{ selected_date }}</h2>
+    <div class="event-grid">
+      {% for event in events %}
+        {% include "events_app/includes/event_card.html" %}
+      {% empty %}<p>На выбранную дату готовых событий нет.</p>{% endfor %}
+    </div>
+  {% endif %}
+  <a href="{% url 'events_app:event_list' %}">К списку событий</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Задачи в работе — HomeParty{% endblock %}
+{% block content %}
+  <h1>Задачи в работе</h1>
+  <ul>
+    {% for task in tasks %}
+      <li><a href="{% url 'tasks_app:task_detail' task.id %}">{{ task.title }}</a> —
+        <a href="{% url 'events_app:event_detail' task.event_id %}">Событие № {{ task.event_id }}</a>
+      </li>
+    {% empty %}<li>Все задачи выполнены или ещё не добавлены.</li>{% endfor %}
+  </ul>
+  <a href="{% url 'tasks_app:task_list' %}">Все задачи</a>
+{% endblock %}

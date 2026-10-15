@@ -4,7 +4,15 @@
   <section class="page-heading">
     <h1>События</h1>
     <p>Всего событий: {{ events|length }}</p>
+    <a href="{% url 'events_app:ready' %}">Готовность праздников по дате</a>
   </section>
+  <form method="get" action="{% url 'events_app:event_list' %}" class="search-form">
+    <label for="min-budget">Минимальный бюджет, руб.</label>
+    <input id="min-budget" name="min_budget" type="number" min="0" max="1000000000000" step="0.01" value="{{ min_budget }}">
+    <button class="btn btn-primary" type="submit">Найти</button>
+    <a href="{% url 'events_app:event_list' %}">Сбросить</a>
+  </form>
+  {% if error %}<p role="alert">{{ error }}</p>{% endif %}
   <div class="event-grid">
     {% for event in events %}
       {% include "events_app/includes/event_card.html" %}
